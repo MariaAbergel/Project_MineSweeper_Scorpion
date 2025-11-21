@@ -36,7 +36,7 @@ public class Board {
             }
         }
     }
-
+//hello
     public int getRows() {
         return rows;
     }
