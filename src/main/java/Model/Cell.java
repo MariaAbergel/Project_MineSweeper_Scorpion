@@ -23,7 +23,28 @@ public class Cell {
         this.questionId = null;
     }
 
-    // --- NEW HELPER METHODS FOR LOGIC ---
+    // --- CRITICAL FIXES: Getters and Setters needed by Board.java ---
+
+    // REQUIRED by Board.placeContent, Board.calculateNumbers, GameStartTest.findCellWithContent
+    public CellContent getContent() {
+        return content;
+    }
+
+    // REQUIRED by Board.placeContent, Board.calculateNumbers
+    public void setContent(CellContent content) {
+        this.content = content;
+    }
+
+    // REQUIRED by Board.calculateNumbers
+    public void setAdjacentMines(int adjacentMines) {
+        this.adjacentMines = adjacentMines;
+    }
+
+    public int getRow() { return row; }
+    public int getCol() { return col; }
+    // ... (other getters/setters for state, used, questionId)
+
+    // --- HELPER METHODS FOR LOGIC (From your provided snippet) ---
 
     public boolean isMine() {
         return content == CellContent.MINE;
@@ -46,14 +67,14 @@ public class Cell {
      * Only works if cell is not REVEALED.
      */
     public boolean toggleFlag() {
-        if (state == CellState.REVEALED) return false; // Cannot flag revealed cells
+        if (state == CellState.REVEALED) return false;
 
         if (state == CellState.FLAGGED) {
             state = CellState.HIDDEN;
-            return false; // Flag removed
+            return false;
         } else {
             state = CellState.FLAGGED;
-            return true; // Flag added
+            return true;
         }
     }
 
@@ -63,6 +84,4 @@ public class Cell {
     public void reveal() {
         this.state = CellState.REVEALED;
     }
-
-    // ... [Keep your existing Getters and Setters] ...
 }

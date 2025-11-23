@@ -19,6 +19,7 @@ public class GameStartTest {
 
         System.out.println("=== TEST SET 1: Initialization & Restart ===");
         check("Game should not be null", game != null);
+        assert game != null;
         check("Difficulty should be EASY", game.getDifficulty() == Difficulty.EASY);
 
         Board b1 = game.getBoard1();
@@ -28,6 +29,7 @@ public class GameStartTest {
         check("Board2 should not be null", b2 != null);
 
         // Board size mapping
+        assert b1 != null;
         check("Board1 rows == EASY rows", b1.getRows() == Difficulty.EASY.getRows());
         check("Board1 cols == EASY cols", b1.getCols() == Difficulty.EASY.getCols());
 
