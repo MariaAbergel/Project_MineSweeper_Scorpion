@@ -52,7 +52,7 @@ public class Board {
     public int getTotalQuestionCells() {
         return totalQuestionCells;
     }
-
+//hello
     public int getTotalSurpriseCells() {
         return totalSurpriseCells;
     }
