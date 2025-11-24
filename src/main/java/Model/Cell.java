@@ -46,9 +46,6 @@ public class Cell {
 
     // --- HELPER METHODS FOR LOGIC (From your provided snippet) ---
 
-    public boolean isMine() {
-        return content == CellContent.MINE;
-    }
 
     public boolean isRevealed() {
         return state == CellState.REVEALED;
@@ -66,17 +63,7 @@ public class Cell {
      * Toggles flag state. Returns true if the cell is now FLAGGED, false if HIDDEN.
      * Only works if cell is not REVEALED.
      */
-    public boolean toggleFlag() {
-        if (state == CellState.REVEALED) return false;
 
-        if (state == CellState.FLAGGED) {
-            state = CellState.HIDDEN;
-            return false;
-        } else {
-            state = CellState.FLAGGED;
-            return true;
-        }
-    }
 
     /**
      * Marks the cell as REVEALED.

@@ -130,62 +130,72 @@ public class Board {
                 break;
         }
 
-        // NEW: After every move, check if we Won or Lost
+        // After every move, check if we Won or Lost
         game.checkGameStatus();
-//hello
-    public int getTotalSurpriseCells() {
-        return totalSurpriseCells;
     }
 
-    private void autoRevealEmptyCells(int r, int c) {
-        for (int i = -1; i <= 1; i++) {
-            for (int j = -1; j <= 1; j++) {
-                int nr = r + i;
-                int nc = c + j;
-                if (isValid(nr, nc)) {
-                    Cell neighbor = cells[nr][nc];
-                    if (!neighbor.isRevealed() && !neighbor.isFlagged() && !neighbor.isMine()) {
-                        // Recursion flows back through revealCell to update safeCellsRemaining
-                        revealCell(nr, nc);
+
+    private void autoRevealEmptyCells ( int r, int c){
+            for (int i = -1; i <= 1; i++) {
+                for (int j = -1; j <= 1; j++) {
+                    int nr = r + i;
+                    int nc = c + j;
+                    if (isValid(nr, nc)) {
+                        Cell neighbor = cells[nr][nc];
+                        if (!neighbor.isRevealed() && !neighbor.isFlagged() && !neighbor.isMine()) {
+                            // Recursion flows back through revealCell to update safeCellsRemaining
+                            revealCell(nr, nc);
+                        }
                     }
                 }
             }
         }
-    }
 
-    public void toggleFlag(int r, int c) {
-        if (!isValid(r, c) || game.getGameState() != GameState.RUNNING) return;
+        public void toggleFlag ( int r, int c){
+            if (!isValid(r, c) || game.getGameState() != GameState.RUNNING) return;
 
-        Cell cell = cells[r][c];
-        boolean isNowFlagged = cell.toggleFlag();
-        int points = 10; // Standard points for flagging (can be moved to Difficulty later)
+            Cell cell = cells[r][c];
+            boolean isNowFlagged = cell.toggleFlag();
+            int points = 10; // Standard points for flagging (can be moved to Difficulty later)
 
-        if (isNowFlagged) {
-            if (cell.isMine()) {
-                game.setSharedScore(game.getSharedScore() + points);
-            } else {
-                game.setSharedScore(game.getSharedScore() - points);
+            if (isNowFlagged) {
+                if (cell.isMine()) {
+                    game.setSharedScore(game.getSharedScore() + points);
+                } else {
+                    game.setSharedScore(game.getSharedScore() - points);
+                }
             }
         }
-    }
 
-    private boolean isValid(int r, int c) {
-        return r >= 0 && r < rows && c >= 0 && c < cols;
-    }
+        private boolean isValid ( int r, int c){
+            return r >= 0 && r < rows && c >= 0 && c < cols;
+        }
 
-    // NEW: Getter used by Game to check win condition
-    public int getSafeCellsRemaining() {
-        return safeCellsRemaining;
-    }
+        // NEW: Getter used by Game to check win condition
+        public int getSafeCellsRemaining () {
+            return safeCellsRemaining;
+        }
 
-    public int getRows() { return rows; }
-    public int getCols() { return cols; }
-    public int getTotalMines() { return totalMines; }
-    public int getTotalQuestionCells() { return totalQuestionCells; }
-    public int getTotalSurpriseCells() { return totalSurpriseCells; }
-    public Cell[][] getCells() { return cells; }
-    public Cell getCell(int row, int col) {
-        if (isValid(row, col)) return cells[row][col];
-        return null;
+        public int getRows () {
+            return rows;
+        }
+        public int getCols () {
+            return cols;
+        }
+        public int getTotalMines () {
+            return totalMines;
+        }
+        public int getTotalQuestionCells () {
+            return totalQuestionCells;
+        }
+        public int getTotalSurpriseCells () {
+            return totalSurpriseCells;
+        }
+        public Cell[][] getCells () {
+            return cells;
+        }
+        public Cell getCell ( int row, int col){
+            if (isValid(row, col)) return cells[row][col];
+            return null;
+        }
     }
-}
