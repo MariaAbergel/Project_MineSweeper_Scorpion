@@ -90,10 +90,31 @@ public class Game {
         this.sharedScore = sharedScore;
     }
 
-    public GameState getGameState() { return gameState; }
-    public Board getBoard1() { return board1; }
-    public Board getBoard2() { return board2; }
-    public Difficulty getDifficulty() { return difficulty; }
-    public int getSharedLives() { return sharedLives; }
-    public int getSharedScore() { return sharedScore; }
+    /**
+     * Activates a special cell (question or surprise).
+     * This method handles the special effects of question and surprise cells.
+     * It deducts the activation cost from the shared score.
+     * 
+     * @param cellContent the type of special cell (QUESTION or SURPRISE)
+     * @param questionId optional question identifier (for QUESTION cells)
+     */
+    public void activateSpecialCell(Cell.CellContent cellContent, Integer questionId) {
+        if (cellContent != Cell.CellContent.QUESTION && cellContent != Cell.CellContent.SURPRISE) {
+            return;
+        }
+
+        int cost = difficulty.getActivationCost();
+        
+        // Check if player has enough score to activate
+        if (sharedScore >= cost) {
+            sharedScore -= cost;
+            
+            // Here you can add additional logic for:
+            // - Question cells: display question, check answer, reward/penalty
+            // - Surprise cells: random positive/negative effects
+            // For now, we just deduct the cost
+        }
+        // If not enough score, the activation fails (cell is still marked as used)
+        // This prevents players from trying again without penalty
+    }
 }
