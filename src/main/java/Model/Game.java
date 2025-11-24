@@ -1,12 +1,5 @@
 package Model;
 
-/**
- * Represents a cooperative game session.
- * A Game holds:
- * - two boards (one for each player)
- * - the selected difficulty
- * - shared lives and shared score for the team
- */
 public class Game {
 
     private Board board1;
@@ -15,63 +8,92 @@ public class Game {
     private int sharedLives;
     private int sharedScore;
 
+    // NEW: Track the game state (NOT_STARTED, RUNNING, WON, LOST)
+    private GameState gameState;
+
     public Game(Difficulty difficulty) {
-        // When a Game is created we immediately start a new session
+        // Initialize game immediately
         startNewGame(difficulty);
     }
 
     /**
-     * Starts a new cooperative game with the given difficulty.
-     * - stores the difficulty
-     * - initializes shared lives from Difficulty
-     * - resets shared score to 0
-     * - creates two fresh boards according to the difficulty
+     * Starts a new cooperative game.
+     * Resets score, lives, and sets state to RUNNING.
      */
     public void startNewGame(Difficulty difficulty) {
         this.difficulty = difficulty;
         this.sharedLives = difficulty.getStartingLives();
         this.sharedScore = 0;
+        this.gameState = GameState.RUNNING; // Set initial state
 
-        this.board1 = new Board(difficulty);
-        this.board2 = new Board(difficulty);
-        // Mine / question / surprise placement will be done later by Dev 2
+        // Create boards and pass 'this' Game instance to them
+        this.board1 = new Board(difficulty, this);
+        this.board2 = new Board(difficulty, this);
     }
 
-    /**
-     * Restarts the game using the same difficulty as the current game.
-     * If no difficulty was set yet, this method does nothing.
-     */
     public void restartGame() {
         if (this.difficulty != null) {
             startNewGame(this.difficulty);
         }
     }
 
-    public Board getBoard1() {
-        return board1;
+    /**
+     * Checks if the game is Won or Lost based on SRS rules.
+     * Called by Board whenever a cell is revealed or lives change.
+     */
+    public void checkGameStatus() {
+        // If game is already over, do nothing
+        if (gameState != GameState.RUNNING) return;
+
+        // 1. Check Lose Condition: Shared lives reach 0 [cite: 97, 103]
+        if (sharedLives <= 0) {
+            gameState = GameState.LOST;
+            printGameStatus();
+            return;
+        }
+
+        // 2. Check Win Condition: All safe cells revealed on BOTH boards [cite: 97, 103]
+        if (board1.getSafeCellsRemaining() == 0 && board2.getSafeCellsRemaining() == 0) {
+            gameState = GameState.WON;
+            printGameStatus();
+        }
     }
 
-    public Board getBoard2() {
-        return board2;
+    /**
+     * Prints the game status to the console (Iteration 1 Requirement).
+     */
+    public void printGameStatus() {
+        System.out.println("=== GAME STATUS UPDATE ===");
+        System.out.println("State: " + gameState);
+        System.out.println("Lives: " + sharedLives);
+        System.out.println("Score: " + sharedScore);
+        System.out.println("Board 1 Safe Cells Left: " + board1.getSafeCellsRemaining());
+        System.out.println("Board 2 Safe Cells Left: " + board2.getSafeCellsRemaining());
+
+        if (gameState == GameState.WON) {
+            System.out.println("RESULT: VICTORY! The team cleared all mines.");
+        } else if (gameState == GameState.LOST) {
+            System.out.println("RESULT: GAME OVER. The team ran out of lives.");
+        }
+        System.out.println("==========================");
     }
 
-    public Difficulty getDifficulty() {
-        return difficulty;
-    }
-
-    public int getSharedLives() {
-        return sharedLives;
-    }
-
-    public int getSharedScore() {
-        return sharedScore;
-    }
+    // --- Getters and Setters ---
 
     public void setSharedLives(int sharedLives) {
         this.sharedLives = sharedLives;
+        // Check status immediately when lives change (e.g., hitting a mine)
+        checkGameStatus();
     }
 
     public void setSharedScore(int sharedScore) {
         this.sharedScore = sharedScore;
     }
+
+    public GameState getGameState() { return gameState; }
+    public Board getBoard1() { return board1; }
+    public Board getBoard2() { return board2; }
+    public Difficulty getDifficulty() { return difficulty; }
+    public int getSharedLives() { return sharedLives; }
+    public int getSharedScore() { return sharedScore; }
 }
