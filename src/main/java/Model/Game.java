@@ -11,6 +11,9 @@ public class Game {
     // NEW: Track the game state (NOT_STARTED, RUNNING, WON, LOST)
     private GameState gameState;
 
+    // NEW: whose turn is it? 1 = Player 1, 2 = Player 2
+    private int currentPlayerTurn;
+
     public Game(Difficulty difficulty) {
         // Initialize game immediately
         startNewGame(difficulty);
@@ -25,6 +28,7 @@ public class Game {
         this.sharedLives = difficulty.getStartingLives();
         this.sharedScore = 0;
         this.gameState = GameState.RUNNING; // Set initial state
+        this.currentPlayerTurn = 1;         // NEW: Player 1 starts
 
         // Create boards and pass 'this' Game instance to them
         this.board1 = new Board(difficulty, this);
@@ -45,14 +49,14 @@ public class Game {
         // If game is already over, do nothing
         if (gameState != GameState.RUNNING) return;
 
-        // 1. Check Lose Condition: Shared lives reach 0 [cite: 97, 103]
+        // 1. Check Lose Condition: Shared lives reach 0
         if (sharedLives <= 0) {
             gameState = GameState.LOST;
             printGameStatus();
             return;
         }
 
-        // 2. Check Win Condition: All safe cells revealed on BOTH boards [cite: 97, 103]
+        // 2. Check Win Condition: All safe cells revealed on BOTH boards
         if (board1.getSafeCellsRemaining() == 0 && board2.getSafeCellsRemaining() == 0) {
             gameState = GameState.WON;
             printGameStatus();
@@ -94,9 +98,6 @@ public class Game {
      * Activates a special cell (question or surprise).
      * This method handles the special effects of question and surprise cells.
      * It deducts the activation cost from the shared score.
-     * 
-     * @param cellContent the type of special cell (QUESTION or SURPRISE)
-     * @param questionId optional question identifier (for QUESTION cells)
      */
     public void activateSpecialCell(Cell.CellContent cellContent, Integer questionId) {
         if (cellContent != Cell.CellContent.QUESTION && cellContent != Cell.CellContent.SURPRISE) {
@@ -104,18 +105,30 @@ public class Game {
         }
 
         int cost = difficulty.getActivationCost();
-        
+
         // Check if player has enough score to activate
         if (sharedScore >= cost) {
             sharedScore -= cost;
-            
-            // Here you can add additional logic for:
-            // - Question cells: display question, check answer, reward/penalty
-            // - Surprise cells: random positive/negative effects
-            // For now, we just deduct the cost
+
+            // Here you can add additional logic (questions / surprises)
         }
         // If not enough score, the activation fails (cell is still marked as used)
-        // This prevents players from trying again without penalty
+    }
+
+    // --- NEW: Turn handling ---
+
+    public int getCurrentPlayerTurn() {
+        return currentPlayerTurn;  // 1 or 2
+    }
+
+    public void setCurrentPlayerTurn(int currentPlayerTurn) {
+        this.currentPlayerTurn = currentPlayerTurn;
+    }
+
+    /** Switch to the other player's turn (only if game is still running). */
+    public void switchTurn() {
+        if (gameState != GameState.RUNNING) return;
+        currentPlayerTurn = (currentPlayerTurn == 1) ? 2 : 1;
     }
 
     // --- Getters ---
@@ -143,5 +156,4 @@ public class Game {
     public int getSharedScore() {
         return sharedScore;
     }
-
 }
