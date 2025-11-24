@@ -104,4 +104,31 @@ public class Cell {
         // Should not happen, but return false defensively
         return false;
     }
+
+    // --- REQUIRED getters and setters for controller logic ---
+
+    public CellState getState() {
+        return state;
+    }
+
+    public void setState(CellState state) {
+        this.state = state;
+    }
+
+    public boolean isUsed() {
+        return used;
+    }
+
+    public void setUsed(boolean used) {
+        this.used = used;
+    }
+
+    public Integer getQuestionId() {
+        return questionId;
+    }
+
+    public void setQuestionId(Integer questionId) {
+        this.questionId = questionId;
+    }
+
 }

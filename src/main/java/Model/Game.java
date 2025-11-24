@@ -117,4 +117,31 @@ public class Game {
         // If not enough score, the activation fails (cell is still marked as used)
         // This prevents players from trying again without penalty
     }
+
+    // --- Getters ---
+
+    public GameState getGameState() {
+        return gameState;
+    }
+
+    public Board getBoard1() {
+        return board1;
+    }
+
+    public Board getBoard2() {
+        return board2;
+    }
+
+    public Difficulty getDifficulty() {
+        return difficulty;
+    }
+
+    public int getSharedLives() {
+        return sharedLives;
+    }
+
+    public int getSharedScore() {
+        return sharedScore;
+    }
+
 }
