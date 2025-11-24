@@ -132,6 +132,9 @@ public class Board {
 
         // NEW: After every move, check if we Won or Lost
         game.checkGameStatus();
+//hello
+    public int getTotalSurpriseCells() {
+        return totalSurpriseCells;
     }
 
     private void autoRevealEmptyCells(int r, int c) {
