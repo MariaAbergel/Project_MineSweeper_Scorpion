@@ -10,7 +10,7 @@ public class GameStartTest {
         GameController controller = new GameController();
 
         // =============================================================
-        // PART 1: Initialization & Restart Tests (From your original code)
+        // PART 1: Initialization & Restart Tests
         // =============================================================
 
         // ----- 1) Start new game on EASY -----
