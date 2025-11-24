@@ -130,5 +130,9 @@ public class Cell {
     public void setQuestionId(Integer questionId) {
         this.questionId = questionId;
     }
+    public int getAdjacentMines() {
+        return adjacentMines;
+    }
+
 
 }
