@@ -154,4 +154,37 @@ public class Cell {
     public void setUsed(boolean used) {
         this.used = used;
     }
+
+    // -------- Game Logic Helpers --------
+
+    /**
+     * Returns true if the cell contains a mine.
+     */
+    public boolean isMine() {
+        return this.content == CellContent.MINE;
+    }
+
+    /**
+     * Toggles the visible state between HIDDEN and FLAGGED.
+     * A cell must be HIDDEN to be flagged or unflagged.
+     * @return true if the state was successfully changed, false otherwise.
+     */
+    public boolean toggleFlag() {
+        // Cannot flag or unflag a revealed cell
+        if (this.state == CellState.REVEALED) {
+            return false;
+        }
+
+        if (this.state == CellState.HIDDEN) {
+            // Change from HIDDEN to FLAGGED
+            this.state = CellState.FLAGGED;
+            return true;
+        } else if (this.state == CellState.FLAGGED) {
+            // Change from FLAGGED back to HIDDEN
+            this.state = CellState.HIDDEN;
+            return true;
+        }
+        // Should not happen, but return false defensively
+        return false;
+    }
 }

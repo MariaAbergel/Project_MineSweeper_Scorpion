@@ -70,8 +70,11 @@ public class GameStartTest {
                 restarted.getBoard1() != oldBoard1);
         check("Board2 should be a new instance after restart",
                 restarted.getBoard2() != oldBoard2);
-    }
+    } // <-- The main method now closes here.
 
+    /**
+     * Helper method to print test results.
+     */
     private static void check(String description, boolean condition) {
         if (condition) {
             System.out.println("[PASS] " + description);
